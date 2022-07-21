@@ -8,5 +8,5 @@ width : Image Width
 
 If Image is not present then it will show message as Image not found.
 
-To test:npm run jasmine
+To test:npm run jasmine ,
         npm test
