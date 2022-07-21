@@ -13,13 +13,22 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const imageRezsize_1 = __importDefault(require("../routes/api/imageRezsize"));
-const fs = require('fs');
 const path_1 = __importDefault(require("path"));
+const fs = require('fs');
 const workDirectory = path_1.default.resolve(__dirname, '../..');
-const processed_imagesDir = workDirectory + '/processed_images';
+const processedImagesDir = workDirectory + '/processed_images';
+const app = require('../index'); // Link to your server file
+const supertest = require('supertest');
+const request = supertest(app);
 describe('/api endpoint test', () => {
+    let server;
     it('expect the processed file with name=fjord,height=100 and width=100', () => __awaiter(void 0, void 0, void 0, function* () {
-        yield (0, imageRezsize_1.default)(workDirectory + '/' + 'images' + '/' + 'fjord.jpg', 100, 100, processed_imagesDir + '/' + 100 + 100 + 'fjord.jpg');
-        expect(fs.existsSync(processed_imagesDir + '/' + '/' + 100 + 100 + 'fjord.jpg')).toEqual(true);
+        yield (0, imageRezsize_1.default)(workDirectory + '/' + 'images' + '/' + 'fjord.jpg', 100, 100, processedImagesDir + '/' + 100 + 100 + 'fjord.jpg');
+        expect(fs.existsSync(processedImagesDir + '/' + '/' + 100 + 100 + 'fjord.jpg')).toEqual(true);
     }));
+    it('gets the test endpoint', () => __awaiter(void 0, void 0, void 0, function* () {
+        const response = yield request.get('/api/imageProcessing?img=fjord&height=100&width=100');
+        expect(response.status).toBe(200);
+        //expect(response.body.message).toBe('pass!')
+    }), 1500);
 });

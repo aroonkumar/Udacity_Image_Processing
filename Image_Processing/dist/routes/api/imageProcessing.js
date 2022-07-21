@@ -17,10 +17,6 @@ const express_1 = __importDefault(require("express"));
 const imageRezsize_1 = __importDefault(require("./imageRezsize"));
 const fs = require('fs');
 const imageProcessing = express_1.default.Router();
-const sharp = require('sharp');
-const bodyParser = require('body-parser');
-const app = (0, express_1.default)();
-//const imgtemp=require('./processingImage')
 imageProcessing.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const img = String(req.query.img);
     const height = Number(req.query.height);
@@ -31,16 +27,22 @@ imageProcessing.get('/', (req, res) => __awaiter(void 0, void 0, void 0, functio
     if (!fs.existsSync(imageName)) {
         res.send('<h1>Image not found</h1>');
     }
-    const processed_imagesDir = workDirectory + '/processed_images';
+    if (height <= 0) {
+        res.send('<h1>Height must me greater than zero</h1>');
+    }
+    if (width <= 0) {
+        res.send('<h1>Width must me greater than zero</h1>');
+    }
+    const processedImagesDir = workDirectory + '/processed_images';
     try {
-        if (!fs.existsSync(processed_imagesDir + '/' + height + width + img)) {
-            yield (0, imageRezsize_1.default)(imagesDir + '/' + img, height, width, processed_imagesDir + '/' + height + width + img);
-            console.log("successful");
+        if (!fs.existsSync(processedImagesDir + '/' + height + width + img)) {
+            yield (0, imageRezsize_1.default)(imagesDir + '/' + img, height, width, processedImagesDir + '/' + height + width + img);
+            console.log('successful');
         }
     }
     catch (err) {
         console.error(err);
     }
-    res.sendFile(processed_imagesDir + '/' + height + width + img);
+    res.sendFile(processedImagesDir + '/' + height + width + img);
 }));
 exports.default = imageProcessing;
