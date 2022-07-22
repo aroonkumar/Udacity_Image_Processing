@@ -12,3 +12,7 @@ If Image is not present then it will show message as Image not found.
 To test:npm run jasmine ,
         npm test
 To run Lint: npm run lint
+
+To run prettier: npm run prettier
+
+
